@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -20,6 +21,32 @@ namespace MediaElementDemo
         public MainWindow()
         {
             InitializeComponent();
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timerTick;
+            timer.Start();
+        }
+
+        private double PrettyTime()
+        {
+            var seconds = Media.NaturalDuration.TimeSpan.TotalSeconds;
+            return seconds;
+        }
+
+        private void timerTick(object sender, EventArgs e)
+        {
+            if ((Media.Source != null) 
+                && (Media.NaturalDuration.HasTimeSpan)
+                && (true//needs to be sliderbar is not sliding 
+                )){
+
+                SliderPrgBar.Minimum = 0;
+                SliderPrgBar.Maximum = Media.NaturalDuration.TimeSpan.TotalSeconds;
+                SliderPrgBar.Value = Media.Position.TotalSeconds;
+
+                TimeDisplay.Text = PrettyTime().ToString("0.#####");
+
+            }
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -29,7 +56,7 @@ namespace MediaElementDemo
             if (dialog.ShowDialog() == true)
             {
                 Media.Source = new Uri(dialog.FileName);
-                MediaName.Text = dialog.FileName;
+                //MediaName.Text = dialog.FileName;
             }
         }
 
