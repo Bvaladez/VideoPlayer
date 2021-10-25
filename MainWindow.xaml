@@ -19,6 +19,8 @@
         <Border BorderBrush="White" BorderThickness="1">
             <MediaElement Name="Media" Margin="2" LoadedBehavior="Manual"/>
         </Border>
+            
+       
 
         <StatusBar Grid.Row="1">
             <StatusBar.ItemsPanel>
@@ -66,12 +68,29 @@
             <Rectangle Height="15" ></Rectangle>
             
             <TextBlock FontSize="10">Start Time</TextBlock>
-            <TextBox></TextBox>
+            <TextBox Name="StartTimeInput"></TextBox>
 
             <TextBlock FontSize="10">End Time</TextBlock>
-            <TextBox></TextBox>
-        </StackPanel>
+            <TextBox Name="EndtimeInput"></TextBox>
+            <Button Margin="0 5 0 0" >Add</Button>
+            <Button >Write File</Button>
+            
+            <TextBlock FontSize="10" Margin="0 5 0 0">Media File</TextBlock>
+            <Rectangle Fill="White" Height="2"></Rectangle>
+            <TextBlock Name="FileTextDisplay"  FontSize="10" FontStyle="Oblique" Margin="0 5 0 0"/>
 
+            <TextBlock FontSize="10" Margin="0 5 0 0">Blocked Times File</TextBlock>
+            <Rectangle Fill="White" Height="2"></Rectangle>
+            <TextBlock Name="BlockFileTextDisplay" FontSize="10" FontStyle="Oblique" Margin="0 5 0 0"/>
+
+
+
+            
+            
+        </StackPanel>
+                   
+        
         <Button Grid.Row="1" Grid.Column="1" Click="LoadButton_Click">Load</Button>
+
     </Grid>
 </Window>

@@ -20,6 +20,8 @@ namespace MediaElementDemo
     {
         private bool mediaPlayerIsPlaying = false;
         private bool userIsDraggingSlider = false;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -50,8 +52,10 @@ namespace MediaElementDemo
             if (dialog.ShowDialog() == true)
             {
                 Media.Source = new Uri(dialog.FileName);
-                //MediaName.Text = dialog.FileName;
+                FileTextDisplay.Text = "FILE FOUND";
+                BlockFileTextDisplay.Text = dialog.FileName;
             }
+
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
