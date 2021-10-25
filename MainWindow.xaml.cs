@@ -56,8 +56,18 @@ namespace MediaElementDemo
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Media.Source != null)
+            if (Media.Source != null && mediaPlayerIsPlaying == false){
                 Media.Play();
+                mediaPlayerIsPlaying = true;
+                PlayPauseButton.Content = "pause";
+            }
+            else
+            {
+                Media.Pause();
+                mediaPlayerIsPlaying = false;
+                PlayPauseButton.Content = "Play";
+            }
+
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
@@ -81,12 +91,6 @@ namespace MediaElementDemo
         {
             Media.Volume = VolumeSlider.Value;
         }
-
-        private void Balance_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            Media.Balance = BalanceSlider.Value;
-        }
-
         private void Speed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Media.SpeedRatio = SpeedSlider.Value;
