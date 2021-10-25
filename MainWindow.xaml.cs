@@ -18,6 +18,8 @@ namespace MediaElementDemo
 {
     public partial class MainWindow : Window
     {
+        private bool mediaPlayerIsPlaying = false;
+        private bool userIsDraggingSlider = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,11 +29,6 @@ namespace MediaElementDemo
             timer.Start();
         }
 
-        private double PrettyTime()
-        {
-            var seconds = Media.NaturalDuration.TimeSpan.TotalSeconds;
-            return seconds;
-        }
 
         private void timerTick(object sender, EventArgs e)
         {
@@ -43,9 +40,6 @@ namespace MediaElementDemo
                 SliderPrgBar.Minimum = 0;
                 SliderPrgBar.Maximum = Media.NaturalDuration.TimeSpan.TotalSeconds;
                 SliderPrgBar.Value = Media.Position.TotalSeconds;
-
-                TimeDisplay.Text = PrettyTime().ToString("0.#####");
-
             }
         }
 
@@ -97,5 +91,21 @@ namespace MediaElementDemo
         {
             Media.SpeedRatio = SpeedSlider.Value;
         }
+        
+        private void SliderPrgBar_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            userIsDraggingSlider = true;
+        }
+        private void SliderPrgBar_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            userIsDraggingSlider = false;
+            Media.Position = TimeSpan.FromSeconds(SliderPrgBar.Value);
+        }
+ 
+        private void SliderPrgBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            TimeDisplay.Text = TimeSpan.FromSeconds(SliderPrgBar.Value).ToString(@"hh\:mm\:ss");
+        }
+
     }
 }
