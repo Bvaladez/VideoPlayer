@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.IO;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -24,6 +25,7 @@ namespace MediaElementDemo
 		private bool userIsDraggingSlider = false;
 		private string mFileName = null;
 		private string mBlkFileName = null;
+		private List<string> mBlkTimes;
 
 
 		public MainWindow()
@@ -64,7 +66,17 @@ namespace MediaElementDemo
 				mFileName = FileName;
 				mBlkFileName = BlkFileName;
 				FileStream fin = openBlkFile(BlkFileName, createBlkFilePath(BlkFileName, dialog.FileName));
-				fin.Close();
+				// blk file was found in same dir as media
+				if (fin != null)
+				{
+					byte[] buf = new byte[1024];
+					int c;
+					// Read file 1 line at a time 
+					while ((c = fin.Read(buf, 0, buf.Length)) > 0)
+					{
+						Debug.WriteLine(Encoding.UTF8.GetString(buf, 0, c));
+					}
+				}
 			}
 
 		}
