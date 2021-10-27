@@ -81,7 +81,8 @@ namespace MediaElementDemo
 						mBlkTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
 					}
 				}
-				// Else do nothing we handle non existent blk files here ...
+				fin.Close();
+				// Else do nothing we handle non existent blk files here (elseWhere)...
 			}
 
 		}
@@ -159,17 +160,17 @@ namespace MediaElementDemo
 
 		private void AddBlkTimes_Clicked(object sender, RoutedEventArgs e)
 		{
+			string s = " to ";
+			string nl = "\n";
 			FileStream fin = File.Open(mBlkDirPath, FileMode.Append, FileAccess.Write, FileShare.None);
-			for (int i = 0; i < mBlkTimes.Count; i++)
-			{
-				fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, 1024));
-				fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, 1024));
-				fin.Close();
-			}
-
+			fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, StartTimeInput.Text.Length));
+			fin.Write(Encoding.UTF8.GetBytes(s, 0, s.Length));
+			fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, EndTimeInput.Text.Length));
+			fin.Write(Encoding.UTF8.GetBytes(nl, 0, nl.Length));
+			fin.Close();
+			StartTimeInput.Text = "";
+			EndTimeInput.Text = "";
 		}
-
-
 
 		private void PlayButton_Click(object sender, RoutedEventArgs e)
 		{

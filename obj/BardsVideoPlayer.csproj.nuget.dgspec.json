@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\school\\CS\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj": {}
+    "C:\\school\\Cs\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj": {}
   },
   "projects": {
-    "C:\\school\\CS\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj": {
+    "C:\\school\\Cs\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\school\\CS\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj",
+        "projectUniqueName": "C:\\school\\Cs\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj",
         "projectName": "BardsVideoPlayer",
-        "projectPath": "C:\\school\\CS\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj",
-        "packagesPath": "C:\\Users\\Bradly\\.nuget\\packages\\",
-        "outputPath": "C:\\school\\CS\\cs-3500_App_Dev\\VideoPlayer\\obj\\",
+        "projectPath": "C:\\school\\Cs\\cs-3500_App_Dev\\VideoPlayer\\BardsVideoPlayer.csproj",
+        "packagesPath": "C:\\Users\\bradl\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\Cs\\cs-3500_App_Dev\\VideoPlayer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Bradly\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\bradl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
