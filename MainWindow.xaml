@@ -71,8 +71,8 @@
             <TextBox Name="StartTimeInput"></TextBox>
 
             <TextBlock FontSize="10">End Time</TextBlock>
-            <TextBox Name="EndtimeInput"></TextBox>
-            <Button Margin="0 5 0 0" >Add</Button>
+            <TextBox Name="EndTimeInput"></TextBox>
+            <Button Margin="0 5 0 0" Click="AddBlkTimes_Clicked" >Add</Button>
             <Button >Write File</Button>
             
             <TextBlock FontSize="10" Margin="0 5 0 0">Media File</TextBlock>

@@ -23,9 +23,11 @@ namespace MediaElementDemo
 	{
 		private bool mediaPlayerIsPlaying = false;
 		private bool userIsDraggingSlider = false;
-		private string mFileName = null;
+		private string mMediaFileName = "";
+		private string mMediaDirPath = null;
 		private string mBlkFileName = null;
-		private List<string> mBlkTimes;
+		private string mBlkDirPath = "";
+		private List<string> mBlkTimes = new List<string>();
 
 
 		public MainWindow()
@@ -63,20 +65,23 @@ namespace MediaElementDemo
 				string BlkFileName = getBlkFileName(FileName);
 				// we dont know if a blk file exists yet update it when we are certain 
 				BlockFileTextDisplay.Text = "";
-				mFileName = FileName;
+				mMediaFileName = FileName;
+				mMediaDirPath = FileName;
 				mBlkFileName = BlkFileName;
-				FileStream fin = openBlkFile(BlkFileName, createBlkFilePath(BlkFileName, dialog.FileName));
+				mBlkDirPath = createBlkFilePath(BlkFileName, dialog.FileName);
+				FileStream fin = openBlkFile(mBlkDirPath);
 				// blk file was found in same dir as media
 				if (fin != null)
 				{
 					byte[] buf = new byte[1024];
 					int c;
-					// Read file 1 line at a time 
+					// if the file has contents read line by line saving each time to mBlkTimes 
 					while ((c = fin.Read(buf, 0, buf.Length)) > 0)
 					{
-						Debug.WriteLine(Encoding.UTF8.GetString(buf, 0, c));
+						mBlkTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
 					}
 				}
+				// Else do nothing we handle non existent blk files here ...
 			}
 
 		}
@@ -135,17 +140,36 @@ namespace MediaElementDemo
 		}
 
 		// Safely open a blk file contained in the same dir as media	
-		private FileStream openBlkFile(string FileName, string path)
+		private FileStream openBlkFile(string blkPath)
 		{
-			string blkFilePath = createBlkFilePath(FileName, path);
-			if (File.Exists(blkFilePath))
+			if (File.Exists(blkPath))
 			{
 				BlockFileTextDisplay.Text = mBlkFileName;
-				FileStream fin = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+				FileStream fin = File.Open(mBlkDirPath, FileMode.Open, FileAccess.Read, FileShare.None);
 				return fin;
 			}
+			BlockFileTextDisplay.Text = "NO FILE";
 			return null;
 		}
+
+		private void writeBlkFile(string s, string path)
+		{
+				
+		}
+
+		private void AddBlkTimes_Clicked(object sender, RoutedEventArgs e)
+		{
+			FileStream fin = File.Open(mBlkDirPath, FileMode.Append, FileAccess.Write, FileShare.None);
+			for (int i = 0; i < mBlkTimes.Count; i++)
+			{
+				fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, 1024));
+				fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, 1024));
+				fin.Close();
+			}
+
+		}
+
+
 
 		private void PlayButton_Click(object sender, RoutedEventArgs e)
 		{
