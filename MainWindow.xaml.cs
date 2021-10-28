@@ -26,8 +26,9 @@ namespace MediaElementDemo
 		private string mMediaFileName = "";
 		private string mMediaDirPath = null;
 		private string mBlkFileName = null;
-		private string mBlkDirPath = "";
-		private List<string> mBlkTimes = new List<string>();
+		private string mBlkFilePath = "";
+		private List<string> mBlkStringTimes = new List<string>();
+		private List<int> mBlkIntTimes = new List<int>();
 
 
 		public MainWindow()
@@ -60,31 +61,70 @@ namespace MediaElementDemo
 			if (dialog.ShowDialog() == true)
 			{
 				Media.Source = new Uri(dialog.FileName);
+
 				string FileName = getFileNameFromPath(dialog.FileName);
 				FileTextDisplay.Text = FileName;
 				string BlkFileName = getBlkFileName(FileName);
-				// we dont know if a blk file exists yet update it when we are certain 
-				BlockFileTextDisplay.Text = "";
+				BlockFileTextDisplay.Text = BlkFileName;
+
 				mMediaFileName = FileName;
 				mMediaDirPath = FileName;
+
 				mBlkFileName = BlkFileName;
-				mBlkDirPath = createBlkFilePath(BlkFileName, dialog.FileName);
-				FileStream fin = openBlkFile(mBlkDirPath);
-				// blk file was found in same dir as media
+				mBlkFilePath = createBlkFilePath(BlkFileName, dialog.FileName);
+
+				FileStream fin = openBlkFile(mBlkFilePath);
 				if (fin != null)
 				{
-					byte[] buf = new byte[1024];
-					int c;
-					// if the file has contents read line by line saving each time to mBlkTimes 
-					while ((c = fin.Read(buf, 0, buf.Length)) > 0)
-					{
-						mBlkTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
-					}
+					// blk file was found in same dir as media
+					captureBlkTimes(fin);
+					convertBlkStrings();
+				}
+				else
+				{
+					writeBlkFile();
 				}
 				fin.Close();
-				// Else do nothing we handle non existent blk files here (elseWhere)...
 			}
 
+		}
+
+		private void captureBlkTimes(FileStream fin)
+		{
+			byte[] buf = new byte[1024];
+			int c;
+				// if the file has contents read line by line saving each time to mBlkTimes 
+			while ((c = fin.Read(buf, 0, buf.Length)) > 0)
+			{
+				mBlkStringTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
+			}
+
+		}
+
+		private void convertBlkStrings()
+		{
+			// Format for string times is hh:mm:ss-hh:mm:ss \n
+			for (int s = 0; s < mBlkStringTimes.Count; s++)
+			{
+				string timeString = mBlkStringTimes[s];
+				char[] delimiterChars = { ':', ':', '-', ':', ':' };
+				string[] words = timeString.Split(delimiterChars);
+				if(words.Length == 6)
+				{
+					int hs = Int32.Parse(words[0]) * 60 * 60;
+					int ms = Int32.Parse(words[1]) * 60;
+					int ss = Int32.Parse(words[2]);
+					int StartTimeSeconds = hs + ms + ss;
+					mBlkIntTimes.Add(StartTimeSeconds);
+
+					int hf = Int32.Parse(words[3]) * 60 * 60;
+					int mf = Int32.Parse(words[4]) * 60;
+					int sf = Int32.Parse(words[5]);
+					int EndTimeSeconds = hf + mf + sf;
+					mBlkIntTimes.Add(EndTimeSeconds);
+
+				}
+			}
 		}
 
 		private string getFileNameFromPath(string path)
@@ -146,25 +186,26 @@ namespace MediaElementDemo
 			if (File.Exists(blkPath))
 			{
 				BlockFileTextDisplay.Text = mBlkFileName;
-				FileStream fin = File.Open(mBlkDirPath, FileMode.Open, FileAccess.Read, FileShare.None);
+				FileStream fin = File.Open(mBlkFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
 				return fin;
 			}
 			BlockFileTextDisplay.Text = "NO FILE";
 			return null;
 		}
 
-		private void writeBlkFile(string s, string path)
+		private void writeBlkFile()
 		{
-				
+    		File.Create(mBlkFilePath);
 		}
 
 		private void AddBlkTimes_Clicked(object sender, RoutedEventArgs e)
 		{
-			if (File.Exists(mBlkDirPath))
+			// We arnt checking to make sure both start time and end time are populated before adding the times, this could lead to problems from user error.
+			if (File.Exists(mBlkFilePath))
 			{
-				string s = " to ";
+				string s = "-";
     			string nl = "\n";
-    			FileStream fin = File.Open(mBlkDirPath, FileMode.Append, FileAccess.Write, FileShare.None);
+    			FileStream fin = File.Open(mBlkFilePath, FileMode.Append, FileAccess.Write, FileShare.None);
     			fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, StartTimeInput.Text.Length));
     			fin.Write(Encoding.UTF8.GetBytes(s, 0, s.Length));
     			fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, EndTimeInput.Text.Length));
@@ -176,7 +217,7 @@ namespace MediaElementDemo
 			else
 			{
 				// If we want to add blk times to a blk file but the blk file doesnt exist we can ask if they want to write the file 
-				// temp solution Do nothing 
+				// temp solution Do nothing on nonexistent blk files.
 			}
 
 		}
