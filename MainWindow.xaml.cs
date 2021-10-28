@@ -160,16 +160,25 @@ namespace MediaElementDemo
 
 		private void AddBlkTimes_Clicked(object sender, RoutedEventArgs e)
 		{
-			string s = " to ";
-			string nl = "\n";
-			FileStream fin = File.Open(mBlkDirPath, FileMode.Append, FileAccess.Write, FileShare.None);
-			fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, StartTimeInput.Text.Length));
-			fin.Write(Encoding.UTF8.GetBytes(s, 0, s.Length));
-			fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, EndTimeInput.Text.Length));
-			fin.Write(Encoding.UTF8.GetBytes(nl, 0, nl.Length));
-			fin.Close();
-			StartTimeInput.Text = "";
-			EndTimeInput.Text = "";
+			if (File.Exists(mBlkDirPath))
+			{
+				string s = " to ";
+    			string nl = "\n";
+    			FileStream fin = File.Open(mBlkDirPath, FileMode.Append, FileAccess.Write, FileShare.None);
+    			fin.Write(Encoding.UTF8.GetBytes(StartTimeInput.Text, 0, StartTimeInput.Text.Length));
+    			fin.Write(Encoding.UTF8.GetBytes(s, 0, s.Length));
+    			fin.Write(Encoding.UTF8.GetBytes(EndTimeInput.Text, 0, EndTimeInput.Text.Length));
+    			fin.Write(Encoding.UTF8.GetBytes(nl, 0, nl.Length));
+    			fin.Close();
+    			StartTimeInput.Text = "";
+    			EndTimeInput.Text = "";
+			}
+			else
+			{
+				// If we want to add blk times to a blk file but the blk file doesnt exist we can ask if they want to write the file 
+				// temp solution Do nothing 
+			}
+
 		}
 
 		private void PlayButton_Click(object sender, RoutedEventArgs e)
