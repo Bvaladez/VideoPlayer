@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.IO;
+using System.Windows.Media.Effects;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Data;
@@ -23,12 +24,18 @@ namespace MediaElementDemo
 	{
 		private bool mediaPlayerIsPlaying = false;
 		private bool userIsDraggingSlider = false;
+
 		private string mMediaFileName = "";
 		private string mMediaDirPath = null;
+
 		private string mBlkFileName = null;
 		private string mBlkFilePath = "";
+
 		private List<string> mBlkStringTimes = new List<string>();
 		private List<int> mBlkIntTimes = new List<int>();
+
+		private bool mBlur = false;
+		private bool mSkip = true;
 
 
 		public MainWindow()
@@ -83,13 +90,13 @@ namespace MediaElementDemo
 				{
 					// blk file was found in same dir as media
 					captureBlkTimes(fin);
+					fin.Close();
 					convertBlkStrings();
 				}
 				else
 				{
 					writeBlkFile();
 				}
-				fin.Close();
 			}
 
 		}
@@ -102,7 +109,14 @@ namespace MediaElementDemo
 				double endTime = mBlkIntTimes[t+1];
 				if (Media.Position.TotalSeconds >= startTime && Media.Position.TotalSeconds <= endTime)
 				{
-					Media.Position = TimeSpan.FromSeconds(endTime);
+					if (mSkip)
+					{
+						Media.Position = TimeSpan.FromSeconds(endTime);
+					}
+					if (mBlur) {
+						BlurEffect blur = new BlurEffect();
+						blur.Radius = 500;
+					}
 				}
 			}
 		}
@@ -111,6 +125,7 @@ namespace MediaElementDemo
 		{
 			// Clear so if a new file is loaded we dont use the wrong blk times
 			mBlkStringTimes.Clear();
+			// this buf doesnt acutally make use read exactly 1 line
 			byte[] buf = new byte[1024];
 			int c;
 				// if the file has contents read line by line saving each time to mBlkTimes 
@@ -238,6 +253,15 @@ namespace MediaElementDemo
         			fin.Close();
         			StartTimeInput.Text = "";
         			EndTimeInput.Text = "";
+
+					FileStream fin_update = openBlkFile(mBlkFilePath);
+					if (fin != null)
+					{
+						// blk file was found in same dir as media
+						captureBlkTimes(fin_update);
+						fin.Close();
+						convertBlkStrings();
+					}
 				}
 				// Atleast one of the fields is not filled out
 				// we can try to convert the times here and if it fails also throw an error so formatting is correct
@@ -325,5 +349,20 @@ namespace MediaElementDemo
 			TimeDisplay.Text = TimeSpan.FromSeconds(SliderPrgBar.Value).ToString(@"hh\:mm\:ss");
 		}
 
+		private void SkipBlurButton_clicked(object sender, RoutedEventArgs e)
+		{
+			if (mSkip)
+			{
+				SkipBlurButton.Content = "Skip";
+				mBlur = true;
+				mSkip = false;
+			}
+			else if (mBlur)
+			{
+				SkipBlurButton.Content = "Blur";
+				mSkip = true;
+				mBlur = false;
+			}
+		}
 	}
 }

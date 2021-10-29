@@ -43,7 +43,7 @@
             </StatusBarItem>
         </StatusBar>
 
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1" Width="Auto">
             <Button Name="PlayPauseButton" Click="PlayButton_Click">Play</Button>
             <Button Click="StopButton_Click">Stop</Button>
             <ToggleButton Click="MuteButton_Click" Margin="0 5 0 0">Mute</ToggleButton>
@@ -65,6 +65,7 @@
             </Slider>
             <Rectangle Height="15" ></Rectangle>
             <Rectangle Height="5" Fill="White" Stroke="Black" ></Rectangle>
+            <Button Name="SkipBlurButton" Click="SkipBlurButton_clicked">Blur</Button>
             <Rectangle Height="15" ></Rectangle>
             
             <TextBlock FontSize="10">Start Time</TextBlock>
@@ -73,15 +74,14 @@
             <TextBlock FontSize="10">End Time</TextBlock>
             <TextBox Name="EndTimeInput"></TextBox>
             <Button Margin="0 5 0 0" Click="AddBlkTimes_Clicked" >Add</Button>
-            <Button >Write File</Button>
             
-            <TextBlock FontSize="10" Margin="0 5 0 0">Media File</TextBlock>
+            <TextBlock FontSize="10" HorizontalAlignment="Center" Margin="0 5 0 0">Media File</TextBlock>
             <Rectangle Fill="White" Height="2"></Rectangle>
-            <TextBlock Name="FileTextDisplay"  FontSize="10" FontStyle="Oblique" Margin="0 5 0 0"/>
+            <TextBlock Name="FileTextDisplay"  FontSize="10" HorizontalAlignment="Center" FontStyle="Oblique" Margin="0 5 0 0"/>
 
-            <TextBlock FontSize="10" Margin="0 5 0 0">Blocked Times File</TextBlock>
+            <TextBlock FontSize="9" HorizontalAlignment="Center" Margin="0 5 0 0">Blocked Times File</TextBlock>
             <Rectangle Fill="White" Height="2"></Rectangle>
-            <TextBlock Name="BlockFileTextDisplay" FontSize="10" FontStyle="Oblique" Margin="0 5 0 0"/>
+            <TextBlock Name="BlockFileTextDisplay" FontSize="10" HorizontalAlignment="Center" FontStyle="Oblique" Margin="0 5 0 0"/>
 
 
 
