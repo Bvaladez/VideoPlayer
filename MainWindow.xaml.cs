@@ -287,7 +287,7 @@ namespace MediaElementDemo
 				Media.Stop();
 				mediaPlayerIsPlaying = false;
 			}
-			if (PlayPauseButton.Content == "Pause")
+			if (PlayPauseButton.Content.ToString() == "Pause")
 			{
 				PlayPauseButton.Content = "Play";
 			}
