@@ -85,16 +85,15 @@ namespace MediaElementDemo
 				mBlkFileName = BlkFileName;
 				mBlkFilePath = createBlkFilePath(BlkFileName, dialog.FileName);
 
-				//FileStream fin = openBlkFile(mBlkFilePath);
 				if (File.Exists(mBlkFilePath))
 				{
 					// blk file was found in same dir as media
 					captureBlkTimes();
-				//	fin.Close();
 					convertBlkStrings();
 				}
 				else
 				{
+					// blk file not found, we create one.
 					writeBlkFile();
 				}
 			}
