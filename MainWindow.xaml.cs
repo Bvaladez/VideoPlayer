@@ -109,6 +109,7 @@ namespace MediaElementDemo
 
 		private void captureBlkTimes(FileStream fin)
 		{
+			// Clear so if a new file is loaded we dont use the wrong blk times
 			mBlkStringTimes.Clear();
 			byte[] buf = new byte[1024];
 			int c;
@@ -122,13 +123,15 @@ namespace MediaElementDemo
 
 		private void convertBlkStrings()
 		{
+			// Clear so if a new file is loaded we dont use the wrong blk times
 			mBlkIntTimes.Clear();
-			// Format for string times is hh:mm:ss-hh:mm:ss \n
+			// Format for string times is --> hh:mm:ss-hh:mm:ss \n
 			for (int s = 0; s < mBlkStringTimes.Count; s++)
 			{
 				string timeString = mBlkStringTimes[s];
 				char[] delimiterChars = { ':', ':', '-', ':', ':' };
 				string[] words = timeString.Split(delimiterChars);
+				// If the time input was formated wrong we dont want to try and convert it, UGLY.
 				if(words.Length == 6)
 				{
 					int hs = Int32.Parse(words[0]) * 60 * 60;
