@@ -85,12 +85,12 @@ namespace MediaElementDemo
 				mBlkFileName = BlkFileName;
 				mBlkFilePath = createBlkFilePath(BlkFileName, dialog.FileName);
 
-				FileStream fin = openBlkFile(mBlkFilePath);
-				if (fin != null)
+				//FileStream fin = openBlkFile(mBlkFilePath);
+				if (File.Exists(mBlkFilePath))
 				{
 					// blk file was found in same dir as media
-					captureBlkTimes(fin);
-					fin.Close();
+					captureBlkTimes();
+				//	fin.Close();
 					convertBlkStrings();
 				}
 				else
@@ -115,13 +115,18 @@ namespace MediaElementDemo
 					}
 					if (mBlur) {
 						BlurEffect blur = new BlurEffect();
-						blur.Radius = 500;
+						blur.Radius = 10;
+						Media.Effect = blur;
 					}
+				}
+				if(Media.Position.TotalSeconds >= endTime)
+				{
+					Media.Effect = null;
 				}
 			}
 		}
 
-		private void captureBlkTimes(FileStream fin)
+		private void captureBlkTimes()
 		{
 			// Clear so if a new file is loaded we dont use the wrong blk times
 			mBlkStringTimes.Clear();
@@ -129,10 +134,14 @@ namespace MediaElementDemo
 			byte[] buf = new byte[1024];
 			int c;
 				// if the file has contents read line by line saving each time to mBlkTimes 
-			while ((c = fin.Read(buf, 0, buf.Length)) > 0)
+			foreach (string line in System.IO.File.ReadLines(mBlkFilePath))
 			{
-				mBlkStringTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
+				mBlkStringTimes.Add(line);
 			}
+			//while ((c = fin.Read(buf, 0, buf.Length)) > 0)
+			//{
+		//		mBlkStringTimes.Add(Encoding.UTF8.GetString(buf, 0, c));
+		//	}
 
 		}
 
@@ -254,14 +263,8 @@ namespace MediaElementDemo
         			StartTimeInput.Text = "";
         			EndTimeInput.Text = "";
 
-					FileStream fin_update = openBlkFile(mBlkFilePath);
-					if (fin != null)
-					{
-						// blk file was found in same dir as media
-						captureBlkTimes(fin_update);
-						fin.Close();
-						convertBlkStrings();
-					}
+					captureBlkTimes();
+					convertBlkStrings();
 				}
 				// Atleast one of the fields is not filled out
 				// we can try to convert the times here and if it fails also throw an error so formatting is correct
