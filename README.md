@@ -1,0 +1,2 @@
+# VideoPlayer
+A media player was written in C# using the .NET framework. The media player supports almost all modern video and image file formats. The media player has some UX features such as a scroll bar for skimming through video as it renders live, a playback speed function. volume slider, and the ability to bluer sections of video by timestamp. The overall goal of this media player was to be an upgraded version of windows default media player, and is one of my first C# projects.
